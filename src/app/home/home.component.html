@@ -1,0 +1,163 @@
+<div class="container-fluid ">
+  <div class="row">
+    <div class="col-sm-12 p-0" *ngIf="token === false">
+      <nav class="m-0 navbar navbar-expand-lg navbar-light fixed-top" style="background-color:darkblue ">
+        <a class="navbar-brand" href="">
+          <img src="../../assets/disqus.png" width="50" height="50" class="d-inline-block align-top" alt="">
+          <span class="text-light" style="font-size: 30px; margin-left: 10px ;font-weight: bold;">Disqus-System</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="nav ml-auto ">
+
+            <li class="nav-item ml-auto text-light">
+
+              <a class="nav-link text-light" href="/login">Login <span class="sr-only">(current)</span></a>
+
+            </li>
+            <li class="nav-item  ">
+              <a class="nav-link text-light" href="/signup">Signup</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+
+
+    <div class="col-sm-12 p-0" *ngIf="token === true">
+      <nav class="m-0 navbar navbar-expand-lg navbar-light fixed-top" style="background-color: darkblue ">
+        <a class="navbar-brand" href="">
+          <img src="../../assets/disqus.png" width="50" height="50" class="d-inline-block align-top" alt="">
+          <span class="text-light" style="font-size: 30px; margin-left: 10px ;">Disqus-System</span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="nav ml-auto ">
+
+            <li class="nav-item  ml-auto">
+              <img src="http://localhost:3000/{{imagePath}}" style="border-radius: 50%;" width="50" height="50" alt="">
+              <br>
+              <a class="nav-link text-light p-0  ">{{userName}}</a>
+              <a class="nav-link text-light p-0 " (click)="logout();">LogOut</a>
+
+              <!-- <a class="nav-link text-light p-0 "  data-toggle="modal"
+                data-target="#exampleModalLong">Create Post</a> -->
+
+            </li>
+
+          </ul>
+        </div>
+
+      </nav>
+    </div>
+
+    <!-- end of nav bar -->
+  </div>
+
+
+  <div class="row mt-5 p-5">
+    <div class="col-sm-12 mt-5" *ngIf="token === true">
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+        Create New Post
+      </button>
+    </div>
+    <div class="col-sm-12 mt-5"
+      *ngFor="let post of allCommentListOfPost | paginate: { itemsPerPage: count, currentPage: p }"
+      (click)="selectPost(post.post.postId)">
+      <div class="card" style="background-color: lightgray">
+        <div class="card-body">
+          <h5 class="card-title">Posted By: {{post.post.postCreatedBy}} &nbsp;<span class="text-muted">
+              {{post.post.postCreatedOn}}</span></h5>
+
+          <h6 class="card-subtitle mb-2 ">{{post.post.postTitle}}</h6>
+          <p class="card-text text-with-dots">{{post.post.postDescription}}</p>
+
+          <p class="btn btn-primary">
+            <span class="badge badge-primary">{{post.commentLength}}</span>Comment </p>
+
+
+        </div>
+      </div>
+
+    </div>
+    <br>
+    <br>
+    <div class=" mr-auto p-2 m-2">
+      <pagination-controls (pageChange)="p = $event"></pagination-controls>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+  aria-hidden="true">
+  <div class="modal-dialog " role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Create-Post</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+
+
+
+        <form #createPostForm="ngForm">
+          <div class="form-group">
+            <label>userEmail</label>
+            <input type="text" name="email" [(ngModel)]="userEmail" #email1="ngModel" class="form-control" readonly>
+          </div>
+
+          <div class="form-group">
+            <label>Post-Title</label>
+            <input type="text" name="PostTitle" [(ngModel)]="postTitle" #title="ngModel" class="form-control"
+              placeholder="Enter post title" required>
+          </div>
+
+          <div [hidden]="title.valid || title.pristine" class="alert alert-danger">
+            Post title is required
+          </div>
+
+
+          <div class="form-group">
+            <label for="Post-Description">Post-Description</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="postDescription"
+              name="postDescription" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>postCreatedBy</label>
+            <input type="text" name="createdBy" [(ngModel)]="postCreatedBy" #createdBy1="ngModel" class="form-control"
+              readonly>
+          </div>
+
+
+          <button type="submit" style="margin:5px;" class="btn btn-primary" (click)="createPost()"
+            [disabled]="!createPostForm.form.valid" data-dismiss="modal">submit</button>
+          <button [routerLink]="['/home']" class="btn btn-info "
+            style="align-self:center;border-radius: 16px; background-color: burlywood">Back</button>
+        </form>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
