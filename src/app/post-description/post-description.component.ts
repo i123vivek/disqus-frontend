@@ -378,4 +378,12 @@ export class PostDescriptionComponent implements OnInit {
     })
   } // end of logout function.
 
+   
+  public getAllLikesOfAComment:any =(commentId) =>{
+
+    this.appService.getAllLikeOfComment(commentId).subscribe((res)=>{
+      
+    })
+
+  }
 }

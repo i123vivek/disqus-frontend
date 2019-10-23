@@ -85,6 +85,26 @@ export class AppService {
     return this.http.get(`${this.url}/api/v1/users/comment/${commentId}/details`);
   }
 
+  public markCommentLike(likeData):Observable<any> {
+    console.log("like data for comment in app service: ", likeData);
+    const params = new HttpParams()
+      .set('commentId',likeData.commentId)
+      .set('userId',likeData.userId)
+      .set('postId',likeData.postId)
+      return this.http.post(`${this.url}/api/v1/users/add/comment/like?authToken=${Cookie.get('authToken')}`, params);
+  }
+
+  public deleteCommentLike(commentId): Observable<any>{
+    console.log("CommentLike to be deleted", commentId);
+    const params = new HttpParams()
+      .set('commentId', commentId)
+    return this.http.post(`${this.url}/api/v1/users/delete/${commentId}/comment/like?authToken=${Cookie.get('authToken')}`, params);
+  }
+
+  public findAllLikeOfAComment(commentId): Observable<any>{
+    return this.http.get(`${this.url}/api/v1/users/get/comment/${commentId}/likes`);
+  }
+
   public addReply(replyData): Observable<any> {
     console.log("reply data for adding reply in app service: ", replyData);
     const params = new HttpParams()
@@ -103,6 +123,12 @@ export class AppService {
   public getSingleReply(replyId): Observable<any> {
     return this.http.get(`${this.url}/api/v1/users/reply/${replyId}/details`);
   }
+
+
+  public getAllLikeOfComment(commentId): Observable<any> {
+    return this.http.get(`${this.url}/api/v1/users//get/comment/${commentId}/likes`);
+  }
+
 
 
 
